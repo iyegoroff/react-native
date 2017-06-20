@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.facebook.react.bridge.ReadableArray;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.BoringLayout;
@@ -352,6 +353,11 @@ public class ReactTextShadowNode extends LayoutShadowNode {
   private boolean mIsUnderlineTextDecorationSet = false;
   private boolean mIsLineThroughTextDecorationSet = false;
 
+  private ReadableArray mGradientStartPos;
+  private ReadableArray mGradientEndPos;
+  private ReadableArray mGradientLocations;
+  private ReadableArray mGradientColors;
+
   /**
    * mFontStyle can be {@link Typeface#NORMAL} or {@link Typeface#ITALIC}.
    * mFontWeight can be {@link Typeface#NORMAL} or {@link Typeface#BOLD}.
@@ -459,6 +465,38 @@ public class ReactTextShadowNode extends LayoutShadowNode {
       mAllowFontScaling = allowFontScaling;
       setFontSize(mFontSizeInput);
       setLineHeight(mLineHeightInput);
+      markUpdated();
+    }
+  }
+
+  @ReactProp(name = "gradientLocations")
+  public void setGradientLocations(ReadableArray locations) {
+    if (locations != mGradientLocations) {
+      mGradientLocations = locations;
+      markUpdated();
+    }
+  }
+
+  @ReactProp(name = "gradientStart")
+  public void setGradientStartPosition(ReadableArray startPos) {
+    if (startPos != mGradientStartPos) {
+      mGradientStartPos = startPos;
+      markUpdated();
+    }
+  }
+
+  @ReactProp(name = "gradientEnd")
+  public void setGradientEndPosition(ReadableArray endPos) {
+    if (endPos != mGradientEndPos) {
+      mGradientEndPos = endPos;
+      markUpdated();
+    }
+  }
+
+  @ReactProp(name = "gradientColors")
+  public void setGradientColors(ReadableArray colors) {
+    if (colors != mGradientColors) {
+      mGradientColors = colors;
       markUpdated();
     }
   }
@@ -653,7 +691,11 @@ public class ReactTextShadowNode extends LayoutShadowNode {
           getPadding(Spacing.END),
           getPadding(Spacing.BOTTOM),
           getTextAlign(),
-          mTextBreakStrategy
+          mTextBreakStrategy,
+          mGradientStartPos,
+          mGradientEndPos,
+          mGradientLocations,
+          mGradientColors
         );
       uiViewOperationQueue.enqueueUpdateExtraData(getReactTag(), reactTextUpdate);
     }
