@@ -22,6 +22,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import java.lang.*;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
@@ -51,6 +52,8 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   private @Nullable Drawable mEndBackground;
   private int mEndFillColor = Color.TRANSPARENT;
   private @Nullable ReactViewBackgroundDrawable mReactBackgroundDrawable;
+  private float mTouchStartX;
+  private float mDragThreshold;
 
   public ReactHorizontalScrollView(Context context) {
     this(context, null);
@@ -85,6 +88,10 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
 
   public void setScrollEnabled(boolean scrollEnabled) {
     mScrollEnabled = scrollEnabled;
+  }
+
+  public void setDragThreshold(float dragThreshold) {
+    mDragThreshold = dragThreshold;
   }
 
   public void setPagingEnabled(boolean pagingEnabled) {
@@ -124,6 +131,16 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   @Override
   public boolean onInterceptTouchEvent(MotionEvent ev) {
     if (!mScrollEnabled) {
+      return false;
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+      mTouchStartX = ev.getX();
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_MOVE &&
+      Math.abs(mTouchStartX - ev.getX()) < mDragThreshold
+    ) {
       return false;
     }
 
