@@ -254,6 +254,8 @@ const ScrollView = React.createClass({
      * The default value is true.
      */
     scrollEnabled: PropTypes.bool,
+
+    dragThreshold: PropTypes.number,
     /**
      * This controls how often the scroll event will be fired while scrolling
      * (as a time interval in ms). A lower number yields better accuracy for code
