@@ -87,6 +87,11 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
     view.setBlurRadius(blurRadius);
   }
 
+  @ReactProp(name = "grayscaled", defaultBoolean = false)
+  public void setGrayscaled(ReactImageView view, boolean grayscaled) {
+    view.setGrayscaled(grayscaled);
+  }
+
   // In JS this is Image.props.loadingIndicatorSource.uri
   @ReactProp(name = "loadingIndicatorSrc")
   public void setLoadingIndicatorSource(ReactImageView view, @Nullable String source) {
