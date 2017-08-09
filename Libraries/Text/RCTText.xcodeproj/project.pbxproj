@@ -33,6 +33,7 @@
 		59F60E921E661BDD0081153B /* RCTShadowTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F60E8E1E661BDD0081153B /* RCTShadowTextField.m */; };
 		59F60E931E661BDD0081153B /* RCTShadowTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F60E901E661BDD0081153B /* RCTShadowTextView.m */; };
 		59F60E941E661BDD0081153B /* RCTShadowTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F60E901E661BDD0081153B /* RCTShadowTextView.m */; };
+		74A205871F3A093F00D074F1 /* UIColor+Gradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A205861F3A093F00D074F1 /* UIColor+Gradient.m */; };
 		AF3225F91DE5574F00D3E7E7 /* RCTConvert+Text.m in Sources */ = {isa = PBXBuildFile; fileRef = AF3225F81DE5574F00D3E7E7 /* RCTConvert+Text.m */; };
 		AF3225FA1DE5574F00D3E7E7 /* RCTConvert+Text.m in Sources */ = {isa = PBXBuildFile; fileRef = AF3225F81DE5574F00D3E7E7 /* RCTConvert+Text.m */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,8 @@
 		59F60E8E1E661BDD0081153B /* RCTShadowTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTShadowTextField.m; sourceTree = "<group>"; };
 		59F60E8F1E661BDD0081153B /* RCTShadowTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTShadowTextView.h; sourceTree = "<group>"; };
 		59F60E901E661BDD0081153B /* RCTShadowTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTShadowTextView.m; sourceTree = "<group>"; };
+		74A205851F3A093F00D074F1 /* UIColor+Gradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Gradient.h"; sourceTree = "<group>"; };
+		74A205861F3A093F00D074F1 /* UIColor+Gradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Gradient.m"; sourceTree = "<group>"; };
 		AF3225F71DE5574F00D3E7E7 /* RCTConvert+Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Text.h"; sourceTree = "<group>"; };
 		AF3225F81DE5574F00D3E7E7 /* RCTConvert+Text.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Text.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +77,8 @@
 		58B511921A9E6C1200147676 = {
 			isa = PBXGroup;
 			children = (
+				74A205851F3A093F00D074F1 /* UIColor+Gradient.h */,
+				74A205861F3A093F00D074F1 /* UIColor+Gradient.m */,
 				58B5119C1A9E6C1200147676 /* Products */,
 				AF3225F71DE5574F00D3E7E7 /* RCTConvert+Text.h */,
 				AF3225F81DE5574F00D3E7E7 /* RCTConvert+Text.m */,
@@ -225,6 +230,7 @@
 				131B6AC11AF0CD0600FFC3E0 /* RCTTextViewManager.m in Sources */,
 				59F60E931E661BDD0081153B /* RCTShadowTextView.m in Sources */,
 				58B511CF1A9E6C5C00147676 /* RCTShadowRawText.m in Sources */,
+				74A205871F3A093F00D074F1 /* UIColor+Gradient.m in Sources */,
 				58B511D01A9E6C5C00147676 /* RCTShadowText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
