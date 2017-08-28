@@ -268,6 +268,8 @@ const ScrollView = createReactClass({
      * Note that the view can be always be scrolled by calling `scrollTo`.
      */
     scrollEnabled: PropTypes.bool,
+
+    dragThreshold: PropTypes.number,
     /**
      * This controls how often the scroll event will be fired while scrolling
      * (as a time interval in ms). A lower number yields better accuracy for code

@@ -41,6 +41,10 @@ const viewConfig = {
     adjustsFontSizeToFit: true,
     minimumFontScale: true,
     textBreakStrategy: true,
+    gradientLocations: true,
+    gradientStart: true,
+    gradientEnd: true,
+    gradientColors: true
   }),
   uiViewClassName: 'RCTText',
 };
@@ -356,6 +360,12 @@ const Text = createReactClass({
       newProps = {
         ...newProps,
         selectionColor: processColor(newProps.selectionColor)
+      };
+    }
+    if (newProps.gradientColors != null) {
+      newProps = {
+        ...newProps,
+        gradientColors: newProps.gradientColors.map(processColor)
       };
     }
     if (Touchable.TOUCH_TARGET_DEBUG && newProps.onPress) {

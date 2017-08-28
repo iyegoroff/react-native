@@ -81,6 +81,10 @@ RCT_EXPORT_SHADOW_PROPERTY(textShadowColor, UIColor)
 RCT_EXPORT_SHADOW_PROPERTY(adjustsFontSizeToFit, BOOL)
 RCT_EXPORT_SHADOW_PROPERTY(minimumFontScale, CGFloat)
 RCT_EXPORT_SHADOW_PROPERTY(selectable, BOOL)
+RCT_EXPORT_SHADOW_PROPERTY(gradientStart, NSArray)
+RCT_EXPORT_SHADOW_PROPERTY(gradientEnd, NSArray)
+RCT_EXPORT_SHADOW_PROPERTY(gradientLocations, NSArray)
+RCT_EXPORT_SHADOW_PROPERTY(gradientColors, NSArray)
 
 - (RCTViewManagerUIBlock)uiBlockToAmendWithShadowViewRegistry:(NSDictionary<NSNumber *, RCTShadowView *> *)shadowViewRegistry
 {

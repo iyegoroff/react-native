@@ -68,6 +68,11 @@ public class ReactHorizontalScrollViewManager
     view.setScrollEnabled(value);
   }
 
+  @ReactProp(name = "dragThreshold", defaultFloat = 0)
+  public void setDragThreshold(ReactHorizontalScrollView view, float value) {
+    view.setDragThreshold(PixelUtil.toPixelFromDIP(value));
+  }
+
   @ReactProp(name = "showsHorizontalScrollIndicator")
   public void setShowsHorizontalScrollIndicator(ReactHorizontalScrollView view, boolean value) {
     view.setHorizontalScrollBarEnabled(value);

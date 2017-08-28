@@ -9,6 +9,7 @@
 
 package com.facebook.react.views.text;
 
+import com.facebook.react.bridge.ReadableArray;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -155,6 +156,30 @@ public class ReactTextViewManager extends BaseViewManager<ReactTextView, ReactTe
   @ReactProp(name = "includeFontPadding", defaultBoolean = true)
   public void setIncludeFontPadding(ReactTextView view, boolean includepad) {
     view.setIncludeFontPadding(includepad);
+  }
+
+  @ReactProp(name = "gradientLocations")
+  public void setGradientLocations(ReactTextView view, ReadableArray locations) {
+    if (locations != null) {
+      view.setGradientLocations(locations);
+    }
+  }
+
+  @ReactProp(name = "gradientColors")
+  public void setGradientColors(ReactTextView view, ReadableArray colors) {
+    if (colors != null) {
+      view.setGradientColors(colors);
+    }
+  }
+
+  @ReactProp(name = "gradientStart")
+  public void setGradientStartPosition(ReactTextView view, ReadableArray startPos) {
+    view.setGradientStartPosition(startPos);
+  }
+
+  @ReactProp(name = "gradientEnd")
+  public void setGradientEndPosition(ReactTextView view, ReadableArray endPos) {
+    view.setGradientEndPosition(endPos);
   }
 
   @ReactProp(name = "disabled", defaultBoolean = false)

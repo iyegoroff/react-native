@@ -71,6 +71,11 @@ public class ReactScrollViewManager
     view.setScrollEnabled(value);
   }
 
+  @ReactProp(name = "dragThreshold", defaultFloat = 0)
+  public void setDragThreshold(ReactHorizontalScrollView view, float value) {
+    
+  }
+
   @ReactProp(name = "showsVerticalScrollIndicator")
   public void setShowsVerticalScrollIndicator(ReactScrollView view, boolean value) {
     view.setVerticalScrollBarEnabled(value);

@@ -21,6 +21,7 @@
 #import "RCTShadowRawText.h"
 #import "RCTText.h"
 #import "RCTTextView.h"
+#import "UIColor+Gradient.h"
 
 NSString *const RCTShadowViewAttributeName = @"RCTShadowViewAttributeName";
 NSString *const RCTIsHighlightedAttributeName = @"IsHighlightedAttributeName";
@@ -147,6 +148,32 @@ static YGSize RCTMeasure(YGNodeRef node, float width, YGMeasureMode widthMode, f
   return parentProperties;
 }
 
+- (NSTextStorage *)applyGradient:(NSTextStorage*)textStorage
+{
+  if (self.gradientColors &&
+      self.gradientLocations &&
+      self.gradientColors.count == self.gradientLocations.count) {
+    CGRect textFrame = [self calculateTextFrame:textStorage];
+    
+    if (!isnan(textFrame.size.width) && !isnan(textFrame.size.height)) {
+      UIColor *color = [UIColor colorWithGradientStart:self.gradientStart ?: @[@(0), @(0)]
+                                               withEnd:self.gradientEnd ?: @[@(1), @(0)]
+                                         withLocations:self.gradientLocations
+                                             withFrame:textFrame
+                                             andColors:self.gradientColors];
+      
+      [textStorage removeAttribute:NSForegroundColorAttributeName
+                             range:NSMakeRange(0, textStorage.length)];
+      
+      [self _addAttribute:NSForegroundColorAttributeName
+                withValue:[color colorWithAlphaComponent:CGColorGetAlpha(color.CGColor) * self.opacity]
+       toAttributedString:textStorage];
+    }
+  }
+  
+  return textStorage;
+}
+
 - (void)applyLayoutNode:(YGNodeRef)node
       viewsWithNewFrame:(NSMutableSet<RCTShadowView *> *)viewsWithNewFrame
        absolutePosition:(CGPoint)absolutePosition
@@ -202,7 +229,7 @@ static YGSize RCTMeasure(YGNodeRef node, float width, YGMeasureMode widthMode, f
       widthMode == _cachedTextStorageWidthMode &&
       _cachedEffectiveLayoutDirection == self.effectiveLayoutDirection
   ) {
-    return _cachedTextStorage;
+    return [self applyGradient:_cachedTextStorage];
   }
 
   NSLayoutManager *layoutManager = [NSLayoutManager new];
@@ -229,7 +256,7 @@ static YGSize RCTMeasure(YGNodeRef node, float width, YGMeasureMode widthMode, f
   _cachedTextStorageWidthMode = widthMode;
   _cachedTextStorage = textStorage;
 
-  return textStorage;
+  return [self applyGradient:textStorage];
 }
 
 - (void)dirtyText
@@ -655,6 +682,9 @@ RCT_TEXT_PROPERTY(Opacity, _opacity, CGFloat)
 RCT_TEXT_PROPERTY(TextShadowOffset, _textShadowOffset, CGSize);
 RCT_TEXT_PROPERTY(TextShadowRadius, _textShadowRadius, CGFloat);
 RCT_TEXT_PROPERTY(TextShadowColor, _textShadowColor, UIColor *);
+RCT_TEXT_PROPERTY(GradientStart, _gradientStart, NSArray *);
+RCT_TEXT_PROPERTY(GradientEnd, _gradientEnd, NSArray *);
+RCT_TEXT_PROPERTY(GradientLocations, _gradientLocations, NSArray *);
 
 - (void)setAllowFontScaling:(BOOL)allowFontScaling
 {
@@ -687,6 +717,19 @@ RCT_TEXT_PROPERTY(TextShadowColor, _textShadowColor, UIColor *);
   if (minimumFontScale >= 0.01) {
     _minimumFontScale = minimumFontScale;
   }
+  [self dirtyText];
+}
+
+- (void)setGradientColors:(NSArray<NSNumber *> *)gradientColors
+{
+  NSMutableArray *colors = [NSMutableArray arrayWithCapacity:gradientColors.count];
+  
+  for (NSString *color in gradientColors) {
+    [colors addObject:[RCTConvert UIColor:color]];
+  }
+  
+  _gradientColors = colors;
+  
   [self dirtyText];
 }
 
