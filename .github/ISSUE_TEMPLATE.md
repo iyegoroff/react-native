@@ -16,15 +16,21 @@
   If you answered "No":
 
     We use GitHub Issues exclusively for tracking bugs in React Native. If you're looking for help,
-    the Community page at http://facebook.github.io/react-native/support.html list various resources 
-    that should help you get started.
+    check out the How to Get In Touch section of the following guide:
+    https://facebook.github.io/react-native/docs/contributing.html#how-to-get-in-touch
 
   Now scroll below!
 -->
 
-### Have you read the [Contributing Guidelines](https://facebook.github.io/react-native/docs/contributing.html)?
+
+### Have you read the Bugs section of the How to Contribute guide?
 
 (Write your answer here.)
+
+<!--
+  Please read through the bug reporting guidelines thoroughly:
+  https://facebook.github.io/react-native/docs/contributing.html#bugs
+-->
 
 ### Environment
 

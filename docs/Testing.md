@@ -4,8 +4,8 @@ title: Testing your Changes
 layout: docs
 category: Contributing
 permalink: docs/testing.html
-next: understanding-cli
-previous: maintainers
+next: maintainers
+previous: contributing
 ---
 
 This document is about testing your changes to React Native as a [contributor](docs/contributing.html). If you're interested in testing a React Native app, check out the [React Native Tutorial](http://facebook.github.io/jest/docs/tutorial-react-native.html) on the Jest website.

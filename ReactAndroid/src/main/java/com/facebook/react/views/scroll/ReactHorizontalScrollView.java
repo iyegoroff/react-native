@@ -9,6 +9,8 @@
 
 package com.facebook.react.views.scroll;
 
+import javax.annotation.Nullable;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -20,13 +22,14 @@ import android.graphics.drawable.LayerDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import java.lang.*;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
+import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.uimanager.ReactClippingViewGroup;
 import com.facebook.react.uimanager.ReactClippingViewGroupHelper;
-import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.views.view.ReactViewBackgroundDrawable;
-import javax.annotation.Nullable;
 
 /**
  * Similar to {@link ReactScrollView} but only supports horizontal scrolling.
@@ -50,6 +53,8 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   private @Nullable Drawable mEndBackground;
   private int mEndFillColor = Color.TRANSPARENT;
   private @Nullable ReactViewBackgroundDrawable mReactBackgroundDrawable;
+  private float mTouchStartX;
+  private float mDragThreshold;
 
   public ReactHorizontalScrollView(Context context) {
     this(context, null);
@@ -86,12 +91,12 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
     mScrollEnabled = scrollEnabled;
   }
 
-  public void setPagingEnabled(boolean pagingEnabled) {
-    mPagingEnabled = pagingEnabled;
+  public void setDragThreshold(float dragThreshold) {
+    mDragThreshold = dragThreshold;
   }
 
-  public void flashScrollIndicators() {
-    awakenScrollBars();
+  public void setPagingEnabled(boolean pagingEnabled) {
+    mPagingEnabled = pagingEnabled;
   }
 
   @Override
@@ -130,6 +135,16 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   @Override
   public boolean onInterceptTouchEvent(MotionEvent ev) {
     if (!mScrollEnabled) {
+      return false;
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+      mTouchStartX = ev.getX();
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_MOVE &&
+      Math.abs(mTouchStartX - ev.getX()) < mDragThreshold
+    ) {
       return false;
     }
 
@@ -286,18 +301,22 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
           mActivelyScrolling = false;
           ReactHorizontalScrollView.this.postOnAnimationDelayed(this, ReactScrollViewHelper.MOMENTUM_DELAY);
         } else {
+          boolean doneWithAllScrolling = true;
           if (mPagingEnabled && !mSnappingToPage) {
             // Only if we have pagingEnabled and we have not snapped to the page do we
             // need to continue checking for the scroll.  And we cause that scroll by asking for it
             mSnappingToPage = true;
             smoothScrollToPage(0);
-            ReactHorizontalScrollView.this.postOnAnimationDelayed(this, ReactScrollViewHelper.MOMENTUM_DELAY);
-          } else {
+            doneWithAllScrolling = false;
+          }
+          if (doneWithAllScrolling) {
             if (mSendMomentumEvents) {
               ReactScrollViewHelper.emitScrollMomentumEndEvent(ReactHorizontalScrollView.this);
             }
             ReactHorizontalScrollView.this.mPostTouchRunnable = null;
             disableFpsListener();
+          } else {
+            ReactHorizontalScrollView.this.postOnAnimationDelayed(this, ReactScrollViewHelper.MOMENTUM_DELAY);
           }
         }
       }

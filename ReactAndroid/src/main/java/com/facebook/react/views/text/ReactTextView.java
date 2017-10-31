@@ -11,6 +11,9 @@ package com.facebook.react.views.text;
 
 import javax.annotation.Nullable;
 
+import com.facebook.react.bridge.ReadableArray;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -40,6 +43,11 @@ public class ReactTextView extends TextView implements ReactCompoundView {
   private int mTextAlign = Gravity.NO_GRAVITY;
   private int mNumberOfLines = ViewDefaults.NUMBER_OF_LINES;
   private TextUtils.TruncateAt mEllipsizeLocation = TextUtils.TruncateAt.END;
+  private float[] mGradientLocations;
+  private float[] mGradientStartPos = {0, 0};
+  private float[] mGradientEndPos = {1, 0};
+  private int[] mGradientColors;
+  private int[] mSize = {0, 0};
 
   private ReactViewBackgroundDrawable mReactBackgroundDrawable;
 
@@ -75,6 +83,10 @@ public class ReactTextView extends TextView implements ReactCompoundView {
         setBreakStrategy(update.getTextBreakStrategy());
       }
     }
+    setGradientStartPosition(update.getGradientStartPosition());
+    setGradientEndPosition(update.getGradientEndPosition());
+    setGradientLocations(update.getGradientLocations());
+    setGradientColors(update.getGradientColors());
   }
 
   @Override
@@ -262,6 +274,65 @@ public class ReactTextView extends TextView implements ReactCompoundView {
 
   public void setBorderStyle(@Nullable String style) {
     getOrCreateReactViewBackground().setBorderStyle(style);
+  }
+
+  public void setGradientStartPosition(ReadableArray startPos) {
+    if (startPos != null) {
+      mGradientStartPos = new float[]{(float) startPos.getDouble(0), (float) startPos.getDouble(1)};
+      drawGradient();
+    }
+  }
+
+  public void setGradientEndPosition(ReadableArray endPos) {
+    if (endPos != null) {
+      mGradientEndPos = new float[]{(float) endPos.getDouble(0), (float) endPos.getDouble(1)};
+      drawGradient();
+    }
+  }
+
+  public void setGradientLocations(ReadableArray locations) {
+    if (locations != null) {
+      float[] _locations = new float[locations.size()];
+      for (int i=0; i < _locations.length; i++) {
+        _locations[i] = (float) locations.getDouble(i);
+      }
+      mGradientLocations = _locations;
+      drawGradient();
+    }
+  }
+
+  public void setGradientColors(ReadableArray colors) {
+    if (colors != null) {
+      int[] _colors = new int[colors.size()];
+      for (int i=0; i < _colors.length; i++)
+      {
+          _colors[i] = colors.getInt(i);
+      }
+      mGradientColors = _colors;
+      drawGradient();
+    }
+  }
+
+  @Override
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    mSize = new int[]{w, h};
+    drawGradient();
+  }
+
+  private void drawGradient() {
+    if (mGradientLocations != null && mGradientColors != null && mGradientColors.length == mGradientLocations.length) {
+      getPaint().setShader(new LinearGradient(
+        mGradientStartPos[0] * mSize[0],
+        mGradientStartPos[1] * mSize[1],
+        mGradientEndPos[0] * mSize[0],
+        mGradientEndPos[1] * mSize[1],
+        mGradientColors,
+        mGradientLocations,
+        Shader.TileMode.CLAMP
+      ));
+
+      invalidate();
+    }
   }
 
   private ReactViewBackgroundDrawable getOrCreateReactViewBackground() {

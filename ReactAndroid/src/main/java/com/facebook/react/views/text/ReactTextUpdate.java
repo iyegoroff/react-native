@@ -11,6 +11,7 @@ package com.facebook.react.views.text;
 
 import android.text.Layout;
 import android.text.Spannable;
+import com.facebook.react.bridge.ReadableArray;
 
 /**
  * Class that contains the data needed for a text update.
@@ -28,6 +29,10 @@ public class ReactTextUpdate {
   private final float mPaddingBottom;
   private final int mTextAlign;
   private final int mTextBreakStrategy;
+  private final ReadableArray mGradientStartPos;
+  private final ReadableArray mGradientEndPos;
+  private final ReadableArray mGradientLocations;
+  private final ReadableArray mGradientColors;
 
   /**
    * @deprecated Use a non-deprecated constructor for ReactTextUpdate instead. This one remains
@@ -51,7 +56,11 @@ public class ReactTextUpdate {
         paddingEnd,
         paddingBottom,
         textAlign,
-        Layout.BREAK_STRATEGY_HIGH_QUALITY);
+        Layout.BREAK_STRATEGY_HIGH_QUALITY,
+        null,
+        null,
+        null,
+        null);
   }
 
   public ReactTextUpdate(
@@ -63,7 +72,11 @@ public class ReactTextUpdate {
     float paddingEnd,
     float paddingBottom,
     int textAlign,
-    int textBreakStrategy) {
+    int textBreakStrategy,
+    ReadableArray gradientStartPos,
+    ReadableArray gradientEndPos,
+    ReadableArray gradientLocations,
+    ReadableArray gradientColors) {
     mText = text;
     mJsEventCounter = jsEventCounter;
     mContainsImages = containsImages;
@@ -73,6 +86,10 @@ public class ReactTextUpdate {
     mPaddingBottom = paddingBottom;
     mTextAlign = textAlign;
     mTextBreakStrategy = textBreakStrategy;
+    mGradientStartPos = gradientStartPos;
+    mGradientEndPos = gradientEndPos;
+    mGradientLocations = gradientLocations;
+    mGradientColors = gradientColors;
   }
 
   public Spannable getText() {
@@ -109,5 +126,21 @@ public class ReactTextUpdate {
 
   public int getTextBreakStrategy() {
     return mTextBreakStrategy;
+  }
+
+  public ReadableArray getGradientStartPosition() {
+    return mGradientStartPos;
+  }
+
+  public ReadableArray getGradientEndPosition() {
+    return mGradientEndPos;
+  }
+
+  public ReadableArray getGradientLocations() {
+    return mGradientLocations;
+  }
+
+  public ReadableArray getGradientColors() {
+    return mGradientColors;
   }
 }
