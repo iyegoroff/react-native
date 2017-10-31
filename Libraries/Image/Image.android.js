@@ -109,6 +109,8 @@ var Image = createReactClass({
           height: PropTypes.number,
         }))
     ]),
+
+    grayscaled: PropTypes.bool,
     /**
     * blurRadius: the blur radius of the blur filter added to the image
     */
