@@ -9,6 +9,8 @@
 
 package com.facebook.react.views.scroll;
 
+import javax.annotation.Nullable;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -24,11 +26,10 @@ import java.lang.*;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
+import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.uimanager.ReactClippingViewGroup;
 import com.facebook.react.uimanager.ReactClippingViewGroupHelper;
-import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.views.view.ReactViewBackgroundDrawable;
-import javax.annotation.Nullable;
 
 /**
  * Similar to {@link ReactScrollView} but only supports horizontal scrolling.
@@ -96,10 +97,6 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
 
   public void setPagingEnabled(boolean pagingEnabled) {
     mPagingEnabled = pagingEnabled;
-  }
-
-  public void flashScrollIndicators() {
-    awakenScrollBars();
   }
 
   @Override
@@ -304,18 +301,22 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
           mActivelyScrolling = false;
           ReactHorizontalScrollView.this.postOnAnimationDelayed(this, ReactScrollViewHelper.MOMENTUM_DELAY);
         } else {
+          boolean doneWithAllScrolling = true;
           if (mPagingEnabled && !mSnappingToPage) {
             // Only if we have pagingEnabled and we have not snapped to the page do we
             // need to continue checking for the scroll.  And we cause that scroll by asking for it
             mSnappingToPage = true;
             smoothScrollToPage(0);
-            ReactHorizontalScrollView.this.postOnAnimationDelayed(this, ReactScrollViewHelper.MOMENTUM_DELAY);
-          } else {
+            doneWithAllScrolling = false;
+          }
+          if (doneWithAllScrolling) {
             if (mSendMomentumEvents) {
               ReactScrollViewHelper.emitScrollMomentumEndEvent(ReactHorizontalScrollView.this);
             }
             ReactHorizontalScrollView.this.mPostTouchRunnable = null;
             disableFpsListener();
+          } else {
+            ReactHorizontalScrollView.this.postOnAnimationDelayed(this, ReactScrollViewHelper.MOMENTUM_DELAY);
           }
         }
       }
