@@ -23,6 +23,8 @@ import com.facebook.react.uimanager.ViewDefaults;
 import com.facebook.react.views.view.ReactViewBackgroundManager;
 import javax.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 
 public class ReactTextView extends TextView implements ReactCompoundView {
 
