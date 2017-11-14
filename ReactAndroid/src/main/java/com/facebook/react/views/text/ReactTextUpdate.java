@@ -63,7 +63,11 @@ public class ReactTextUpdate {
     float paddingEnd,
     float paddingBottom,
     int textAlign,
-    int textBreakStrategy) {
+    int textBreakStrategy,
+    ReadableArray gradientStartPos,
+    ReadableArray gradientEndPos,
+    ReadableArray gradientLocations,
+    ReadableArray gradientColors) {
     mText = text;
     mJsEventCounter = jsEventCounter;
     mContainsImages = containsImages;
