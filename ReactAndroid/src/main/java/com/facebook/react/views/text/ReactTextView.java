@@ -22,6 +22,7 @@ import com.facebook.react.uimanager.ReactCompoundView;
 import com.facebook.react.uimanager.ViewDefaults;
 import com.facebook.react.views.view.ReactViewBackgroundManager;
 import javax.annotation.Nullable;
+import com.facebook.react.bridge.ReadableArray;
 
 public class ReactTextView extends TextView implements ReactCompoundView {
 
