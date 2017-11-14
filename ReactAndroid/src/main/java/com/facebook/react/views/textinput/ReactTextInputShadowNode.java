@@ -172,7 +172,7 @@ public class ReactTextInputShadowNode extends ReactBaseTextShadowNode
               getPadding(Spacing.RIGHT),
               getPadding(Spacing.BOTTOM),
               mTextAlign,
-              mTextBreakStrategy);
+              mTextBreakStrategy, null, null, null, null);
       uiViewOperationQueue.enqueueUpdateExtraData(getReactTag(), reactTextUpdate);
     }
   }
