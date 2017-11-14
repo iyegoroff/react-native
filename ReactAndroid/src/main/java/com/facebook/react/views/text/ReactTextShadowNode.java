@@ -29,6 +29,7 @@ import com.facebook.yoga.YogaMeasureOutput;
 import com.facebook.yoga.YogaNode;
 import javax.annotation.Nullable;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.bridge.ReadableArray;
 
 /**
  * {@link ReactBaseTextShadowNode} concrete class for anchor {@code Text} node.
