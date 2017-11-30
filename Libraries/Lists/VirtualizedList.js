@@ -394,6 +394,7 @@ class VirtualizedList extends React.PureComponent<Props, State> {
   }
 
   static defaultProps = {
+    onCellLayout: () => {},
     disableVirtualization: false,
     horizontal: false,
     initialNumToRender: 10,
@@ -873,6 +874,7 @@ class VirtualizedList extends React.PureComponent<Props, State> {
   };
 
   _onCellLayout(e, cellKey, index) {
+    this.props.onCellLayout(e, cellKey, index);
     const layout = e.nativeEvent.layout;
     const next = {
       offset: this._selectOffset(layout),

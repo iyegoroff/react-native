@@ -19,6 +19,8 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import java.lang.*;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
 import com.facebook.react.uimanager.ReactClippingViewGroup;
@@ -48,7 +50,10 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   private @Nullable String mScrollPerfTag;
   private @Nullable Drawable mEndBackground;
   private int mEndFillColor = Color.TRANSPARENT;
+  private float mTouchStartX;
+  private float mDragThreshold;
   private ReactViewBackgroundManager mReactBackgroundManager;
+  private int mSnapInterval = 0;
 
   public ReactHorizontalScrollView(Context context) {
     this(context, null);
@@ -84,6 +89,14 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
 
   public void setScrollEnabled(boolean scrollEnabled) {
     mScrollEnabled = scrollEnabled;
+  }
+
+  public void setDragThreshold(float dragThreshold) {
+    mDragThreshold = dragThreshold;
+  }
+
+  public void setSnapInterval(int snapInterval) {
+    mSnapInterval = snapInterval;
   }
 
   public void setPagingEnabled(boolean pagingEnabled) {
@@ -130,6 +143,16 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   @Override
   public boolean onInterceptTouchEvent(MotionEvent ev) {
     if (!mScrollEnabled) {
+      return false;
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+      mTouchStartX = ev.getX();
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_MOVE &&
+      Math.abs(mTouchStartX - ev.getX()) < mDragThreshold
+    ) {
       return false;
     }
 
@@ -312,7 +335,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
    * scrolling.
    */
   private void smoothScrollToPage(int velocity) {
-    int width = getWidth();
+    int width = mSnapInterval != 0 ? mSnapInterval : getWidth();
     int currentX = getScrollX();
     // TODO (t11123799) - Should we do anything beyond linear accounting of the velocity
     int predictedX = currentX + velocity;
