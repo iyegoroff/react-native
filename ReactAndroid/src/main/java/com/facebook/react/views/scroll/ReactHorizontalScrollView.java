@@ -18,8 +18,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
+import android.util.Log;
 import android.widget.HorizontalScrollView;
 import java.lang.*;
+
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
@@ -27,6 +29,7 @@ import com.facebook.react.uimanager.ReactClippingViewGroup;
 import com.facebook.react.uimanager.ReactClippingViewGroupHelper;
 import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.views.view.ReactViewBackgroundManager;
+import com.facebook.react.common.ReactConstants;
 import javax.annotation.Nullable;
 
 /**
@@ -53,7 +56,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   private float mTouchStartX;
   private float mDragThreshold;
   private ReactViewBackgroundManager mReactBackgroundManager;
-  private int mSnapInterval = 0;
+  private float mSnapInterval = 0;
 
   public ReactHorizontalScrollView(Context context) {
     this(context, null);
@@ -95,7 +98,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
     mDragThreshold = dragThreshold;
   }
 
-  public void setSnapInterval(int snapInterval) {
+  public void setSnapInterval(float snapInterval) {
     mSnapInterval = snapInterval;
   }
 
@@ -335,15 +338,15 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
    * scrolling.
    */
   private void smoothScrollToPage(int velocity) {
-    int width = mSnapInterval != 0 ? mSnapInterval : getWidth();
+    float width = mSnapInterval != 0 ? mSnapInterval : getWidth();
     int currentX = getScrollX();
     // TODO (t11123799) - Should we do anything beyond linear accounting of the velocity
     int predictedX = currentX + velocity;
-    int page = currentX / width;
-    if (predictedX > page * width + width / 2) {
+    int page = currentX / (int)width;
+    if (predictedX > page * (int)width + (int)width / 2) {
       page = page + 1;
     }
-    smoothScrollTo(page * width, getScrollY());
+    smoothScrollTo(Math.round(page * width), getScrollY());
   }
 
   @Override
