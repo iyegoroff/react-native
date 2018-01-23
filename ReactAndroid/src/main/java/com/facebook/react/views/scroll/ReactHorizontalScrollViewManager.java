@@ -11,6 +11,8 @@ package com.facebook.react.views.scroll;
 
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.PixelUtil;
@@ -73,10 +75,10 @@ public class ReactHorizontalScrollViewManager
   }
 
   @ReactProp(name = "snapToInterval")
-  public void setSnapToInterval(ReactHorizontalScrollView view, int snapToInterval) {
+  public void setSnapToInterval(ReactHorizontalScrollView view, float snapToInterval) {
     view.setPagingEnabled(snapToInterval > 0);
-    DisplayMetrics screenDisplayMetrics = DisplayMetricsHolder.getScreenDisplayMetrics();
-    view.setSnapInterval((int)(snapToInterval * screenDisplayMetrics.density));
+    // DisplayMetrics screenDisplayMetrics = DisplayMetricsHolder.getScreenDisplayMetrics();
+    view.setSnapInterval(PixelUtil.toPixelFromDIP(snapToInterval));// * screenDisplayMetrics.density));
   }
 
   @ReactProp(name = "showsHorizontalScrollIndicator")
