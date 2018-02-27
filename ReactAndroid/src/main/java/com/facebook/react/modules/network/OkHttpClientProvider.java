@@ -23,17 +23,6 @@ import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSocketFactory;
-import java.security.cert.X509Certificate;
-import java.security.cert.CertificateException;
-import java.security.SecureRandom;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-
 /**
  * Helper class that provides the same OkHttpClient instance that will be used for all networking
  * requests.

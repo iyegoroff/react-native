@@ -50,10 +50,6 @@ extern NSString *const RCTReactTagAttributeName;
 @property (nonatomic, assign) BOOL adjustsFontSizeToFit;
 @property (nonatomic, assign) CGFloat minimumFontScale;
 @property (nonatomic, assign) BOOL selectable;
-@property (nonatomic, copy) NSArray<NSNumber *> *gradientStart;
-@property (nonatomic, copy) NSArray<NSNumber *> *gradientEnd;
-@property (nonatomic, copy) NSArray<NSNumber *> *gradientLocations;
-@property (nonatomic, copy) NSArray *gradientColors;
 
 - (void)recomputeText;
 

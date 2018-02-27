@@ -28,8 +28,6 @@ import com.facebook.yoga.YogaMeasureMode;
 import com.facebook.yoga.YogaMeasureOutput;
 import com.facebook.yoga.YogaNode;
 import javax.annotation.Nullable;
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.bridge.ReadableArray;
 
 /**
  * {@link ReactBaseTextShadowNode} concrete class for anchor {@code Text} node.
@@ -45,11 +43,6 @@ public class ReactTextShadowNode extends ReactBaseTextShadowNode {
   private static final TextPaint sTextPaintInstance = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
 
   private @Nullable Spannable mPreparedSpannableText;
-  
-  private ReadableArray mGradientStartPos;
-  private ReadableArray mGradientEndPos;
-  private ReadableArray mGradientLocations;
-  private ReadableArray mGradientColors;
 
   private final YogaMeasureFunction mTextMeasureFunction =
       new YogaMeasureFunction() {
@@ -197,45 +190,9 @@ public class ReactTextShadowNode extends ReactBaseTextShadowNode {
           getPadding(Spacing.END),
           getPadding(Spacing.BOTTOM),
           getTextAlign(),
-          mTextBreakStrategy,
-          mGradientStartPos,
-          mGradientEndPos,
-          mGradientLocations,
-          mGradientColors
+          mTextBreakStrategy
         );
       uiViewOperationQueue.enqueueUpdateExtraData(getReactTag(), reactTextUpdate);
-    }
-  }
-  
-  @ReactProp(name = "gradientLocations")
-  public void setGradientLocations(ReadableArray locations) {
-    if (locations != mGradientLocations) {
-      mGradientLocations = locations;
-      markUpdated();
-    }
-  }
-
-  @ReactProp(name = "gradientStart")
-  public void setGradientStartPosition(ReadableArray startPos) {
-    if (startPos != mGradientStartPos) {
-      mGradientStartPos = startPos;
-      markUpdated();
-    }
-  }
-
-  @ReactProp(name = "gradientEnd")
-  public void setGradientEndPosition(ReadableArray endPos) {
-    if (endPos != mGradientEndPos) {
-      mGradientEndPos = endPos;
-      markUpdated();
-    }
-  }
-
-  @ReactProp(name = "gradientColors")
-  public void setGradientColors(ReadableArray colors) {
-    if (colors != mGradientColors) {
-      mGradientColors = colors;
-      markUpdated();
     }
   }
 }

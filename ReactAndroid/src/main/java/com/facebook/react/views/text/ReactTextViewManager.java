@@ -13,8 +13,6 @@ import android.text.Spannable;
 import com.facebook.react.common.annotations.VisibleForTesting;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.bridge.ReadableArray;
 
 /**
  * Concrete class for {@link ReactTextAnchorViewManager} which represents view managers of anchor
@@ -61,29 +59,5 @@ public class ReactTextViewManager
   protected void onAfterUpdateTransaction(ReactTextView view) {
     super.onAfterUpdateTransaction(view);
     view.updateView();
-  }
-  
-  @ReactProp(name = "gradientLocations")
-  public void setGradientLocations(ReactTextView view, ReadableArray locations) {
-    if (locations != null) {
-      view.setGradientLocations(locations);
-    }
-  }
-
-  @ReactProp(name = "gradientColors")
-  public void setGradientColors(ReactTextView view, ReadableArray colors) {
-    if (colors != null) {
-      view.setGradientColors(colors);
-    }
-  }
-
-  @ReactProp(name = "gradientStart")
-  public void setGradientStartPosition(ReactTextView view, ReadableArray startPos) {
-    view.setGradientStartPosition(startPos);
-  }
-
-  @ReactProp(name = "gradientEnd")
-  public void setGradientEndPosition(ReactTextView view, ReadableArray endPos) {
-    view.setGradientEndPosition(endPos);
   }
 }
