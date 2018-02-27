@@ -49,6 +49,8 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   private @Nullable Drawable mEndBackground;
   private int mEndFillColor = Color.TRANSPARENT;
   private int mSnapInterval = 0;
+  private float mTouchStartX;
+  private float mDragThreshold;
   private ReactViewBackgroundManager mReactBackgroundManager;
 
   public ReactHorizontalScrollView(Context context) {
@@ -85,6 +87,10 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
 
   public void setScrollEnabled(boolean scrollEnabled) {
     mScrollEnabled = scrollEnabled;
+  }
+
+  public void setDragThreshold(float dragThreshold) {
+    mDragThreshold = dragThreshold;
   }
 
   public void setPagingEnabled(boolean pagingEnabled) {
@@ -135,6 +141,16 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   @Override
   public boolean onInterceptTouchEvent(MotionEvent ev) {
     if (!mScrollEnabled) {
+      return false;
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+      mTouchStartX = ev.getX();
+    }
+
+    if (ev.getAction() == MotionEvent.ACTION_MOVE &&
+      Math.abs(mTouchStartX - ev.getX()) < mDragThreshold
+    ) {
       return false;
     }
 
@@ -330,11 +346,11 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
     int currentX = getScrollX();
     // TODO (t11123799) - Should we do anything beyond linear accounting of the velocity
     int predictedX = currentX + velocity;
-    int page = currentX / width;
-    if (predictedX > page * width + width / 2) {
+    int page = currentX / (int)width;
+    if (predictedX > page * (int)width + (int)width / 2) {
       page = page + 1;
     }
-    smoothScrollTo(page * width, getScrollY());
+    smoothScrollTo(Math.round(page * width), getScrollY());
   }
 
   @Override

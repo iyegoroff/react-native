@@ -19,6 +19,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import javax.net.ssl.TrustManager;
+import java.security.SecureRandom;
+
 /**
  *
  * This class is needed for TLS 1.2 support on Android 4.x
@@ -27,6 +30,12 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class TLSSocketFactory extends SSLSocketFactory {
     private SSLSocketFactory delegate;
+
+    public TLSSocketFactory(TrustManager[] trustManager) throws KeyManagementException, NoSuchAlgorithmException {
+        SSLContext context = SSLContext.getInstance("TLS");
+        context.init(null, trustManager, new java.security.SecureRandom());
+        delegate = context.getSocketFactory();
+    }
 
     public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext context = SSLContext.getInstance("TLS");

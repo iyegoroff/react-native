@@ -23,6 +23,17 @@ import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
 
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+import java.security.cert.X509Certificate;
+import java.security.cert.CertificateException;
+import java.security.SecureRandom;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+
 /**
  * Helper class that provides the same OkHttpClient instance that will be used for all networking
  * requests.
@@ -46,14 +57,37 @@ public class OkHttpClientProvider {
   }
 
   public static OkHttpClient createClient() {
+    TrustManager[] trustAllCerts = new TrustManager[] {
+      new X509TrustManager() {
+        @Override
+        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+          return new java.security.cert.X509Certificate[]{};
+        }
+      }
+    };
+
     // No timeouts by default
     OkHttpClient.Builder client = new OkHttpClient.Builder()
       .connectTimeout(0, TimeUnit.MILLISECONDS)
       .readTimeout(0, TimeUnit.MILLISECONDS)
       .writeTimeout(0, TimeUnit.MILLISECONDS)
-      .cookieJar(new ReactCookieJarContainer());
+      .cookieJar(new ReactCookieJarContainer())
+      .hostnameVerifier(new HostnameVerifier() {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+          return true;
+        }
+      });
 
-    return enableTls12OnPreLollipop(client).build();
+    return enableTls12(client, trustAllCerts).build();
   }
 
   /*
@@ -61,27 +95,32 @@ public class OkHttpClientProvider {
     available but not enabled by default. The following method
     enables it.
    */
-  public static OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-      try {
-        client.sslSocketFactory(new TLSSocketFactory());
+  public static OkHttpClient.Builder enableTls12(OkHttpClient.Builder client, TrustManager[] trustManager) {
+    try {    
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+          client.sslSocketFactory(new TLSSocketFactory(trustManager), (X509TrustManager)trustManager[0]);
 
-        ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                .tlsVersions(TlsVersion.TLS_1_2)
-                .build();
+          ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                  .tlsVersions(TlsVersion.TLS_1_2)
+                  .build();
 
-        List<ConnectionSpec> specs = new ArrayList<>();
-        specs.add(cs);
-        specs.add(ConnectionSpec.COMPATIBLE_TLS);
-        specs.add(ConnectionSpec.CLEARTEXT);
+          List<ConnectionSpec> specs = new ArrayList<>();
+          specs.add(cs);
+          specs.add(ConnectionSpec.COMPATIBLE_TLS);
+          specs.add(ConnectionSpec.CLEARTEXT);
 
-        client.connectionSpecs(specs);
-      } catch (Exception exc) {
-        FLog.e("OkHttpClientProvider", "Error while enabling TLS 1.2", exc);
+          client.connectionSpecs(specs);
+        
+      } else {
+        final SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, trustManager, new java.security.SecureRandom());
+        final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+        client.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustManager[0]);
       }
+    } catch (Exception exc) {
+      FLog.e("OkHttpClientProvider", "Error while enabling TLS 1.2", exc);
     }
 
     return client;
   }
-
 }

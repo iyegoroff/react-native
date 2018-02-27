@@ -110,6 +110,8 @@ var Image = createReactClass({
           headers: PropTypes.objectOf(PropTypes.string),
         }))
     ]),
+
+    grayscaled: PropTypes.bool,
     /**
     * blurRadius: the blur radius of the blur filter added to the image
     */
