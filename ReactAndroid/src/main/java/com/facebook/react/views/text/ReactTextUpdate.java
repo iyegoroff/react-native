@@ -11,7 +11,6 @@ package com.facebook.react.views.text;
 
 import android.text.Layout;
 import android.text.Spannable;
-import com.facebook.react.bridge.ReadableArray;
 
 /**
  * Class that contains the data needed for a text update.
@@ -52,11 +51,7 @@ public class ReactTextUpdate {
         paddingEnd,
         paddingBottom,
         textAlign,
-        Layout.BREAK_STRATEGY_HIGH_QUALITY,
-        null,
-        null,
-        null,
-        null);
+        Layout.BREAK_STRATEGY_HIGH_QUALITY);
   }
 
   public ReactTextUpdate(
