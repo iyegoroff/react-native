@@ -48,7 +48,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
   private @Nullable String mScrollPerfTag;
   private @Nullable Drawable mEndBackground;
   private int mEndFillColor = Color.TRANSPARENT;
-  private int mSnapInterval = 0;
+  private float mSnapInterval = 0;
   private float mTouchStartX;
   private float mDragThreshold;
   private ReactViewBackgroundManager mReactBackgroundManager;
@@ -97,7 +97,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
     mPagingEnabled = pagingEnabled;
   }
 
-  public void setSnapInterval(int snapInterval) {
+  public void setSnapInterval(float snapInterval) {
     mSnapInterval = snapInterval;
   }
 
@@ -342,7 +342,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
    * scrolling.
    */
   private void smoothScrollToPage(int velocity) {
-    int width = getSnapInterval();
+    float width = mSnapInterval != 0 ? mSnapInterval : getWidth();
     int currentX = getScrollX();
     // TODO (t11123799) - Should we do anything beyond linear accounting of the velocity
     int predictedX = currentX + velocity;
