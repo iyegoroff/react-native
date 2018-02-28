@@ -235,7 +235,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView implements
     outClippingRect.set(Assertions.assertNotNull(mClippingRect));
   }
 
-  private int getSnapInterval() {
+  private float getSnapInterval() {
     if (mSnapInterval != 0) {
       return mSnapInterval;
     }
