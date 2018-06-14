@@ -41,6 +41,7 @@
 @property (nonatomic, assign) UIEdgeInsets contentInset;
 @property (nonatomic, assign) BOOL automaticallyAdjustContentInsets;
 @property (nonatomic, assign) BOOL DEPRECATED_sendUpdatedChildFrames;
+@property (nonatomic, assign) CGFloat dragThreshold;
 @property (nonatomic, assign) NSTimeInterval scrollEventThrottle;
 @property (nonatomic, assign) BOOL centerContent;
 @property (nonatomic, copy) NSDictionary *maintainVisibleContentPosition;

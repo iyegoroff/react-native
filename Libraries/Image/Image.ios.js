@@ -76,6 +76,8 @@ const Image = createReactClass({
      * See https://facebook.github.io/react-native/docs/image.html#accessibilitylabel
      */
     accessibilityLabel: PropTypes.node,
+
+    grayscaled: PropTypes.bool,
     /**
      * blurRadius: the blur radius of the blur filter added to the image
      *

@@ -34,7 +34,7 @@ const viewConfig = {
     selectionColor: true,
     adjustsFontSizeToFit: true,
     minimumFontScale: true,
-    textBreakStrategy: true,
+    textBreakStrategy: true
   }),
   uiViewClassName: 'RCTText',
 };

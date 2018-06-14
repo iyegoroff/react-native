@@ -373,6 +373,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   uint16_t _coalescingKey;
   NSString *_lastEmittedEventName;
   NSHashTable *_scrollListeners;
+  CGFloat _touchStartX;
+  BOOL _dragHasStarted;
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
@@ -408,6 +410,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
     _cachedChildFrames = [NSMutableArray new];
 
     _scrollListeners = [NSHashTable weakObjectsHashTable];
+    
+    _dragHasStarted = NO;
 
     [self addSubview:_scrollView];
   }
@@ -651,6 +655,14 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidZoom, onScroll)
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+  if (_dragHasStarted) {
+    CGFloat translation = fabs([scrollView.panGestureRecognizer translationInView:scrollView].x);
+    
+    if (translation < _dragThreshold) {
+      [scrollView setContentOffset:CGPointMake(_touchStartX, 0.0)];
+    }
+  }
+  
   [self updateClippedSubviews];
   NSTimeInterval now = CACurrentMediaTime();
   /**
@@ -710,6 +722,9 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidZoom, onScroll)
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+  _dragHasStarted = YES;
+  _touchStartX = [scrollView contentOffset].x;
+  
   _allowNextScrollNoMatterWhat = YES; // Ensure next scroll event is recorded, regardless of throttle
   RCT_SEND_SCROLL_EVENT(onScrollBeginDrag, nil);
   RCT_FORWARD_SCROLL_EVENT(scrollViewWillBeginDragging:scrollView);
@@ -717,6 +732,8 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidZoom, onScroll)
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+  _dragHasStarted = NO;
+  
   // snapToInterval
   // An alternative to enablePaging which allows setting custom stopping intervals,
   // smaller than a full page size. Often seen in apps which feature horizonally

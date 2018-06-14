@@ -12,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -234,6 +236,17 @@ public class ReactImageView extends GenericDraweeView {
       mIterativeBoxBlurPostProcessor = new IterativeBoxBlurPostProcessor(pixelBlurRadius);
     }
     mIsDirty = true;
+  }
+
+  public void setGrayscaled(boolean enabled) {
+    if (enabled) {
+      ColorMatrix matrix = new ColorMatrix();
+      matrix.setSaturation(0);
+      
+      setColorFilter(new ColorMatrixColorFilter(matrix));
+    } else {
+      clearColorFilter();
+    }
   }
 
   public void setBorderColor(int borderColor) {
